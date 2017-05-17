@@ -66,11 +66,10 @@ namespace goedle_sdk.detail
 			if (!string.IsNullOrEmpty(trait_key))
 				this.trait_key = trait_key;
 				if (!string.IsNullOrEmpty(trait_value))
-					this.event_id = trait_value;
+					this.trait_value = trait_value;
 			// This is true if event_value is NaN
 			if (!string.IsNullOrEmpty(event_value)) 
 				this.event_value = event_value;
-
 			this.timezone = Int32.MaxValue;
 		}
 
