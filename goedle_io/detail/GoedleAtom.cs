@@ -25,6 +25,7 @@ namespace goedle_sdk.detail
 		private string trait_key= null;
 		private string trait_value = null;
 		private string app_version = null;
+		private string anomynous_id = null;
 
 		public GoedleAtom(string app_key, 
 			string user_id, 
@@ -56,6 +57,23 @@ namespace goedle_sdk.detail
 			if (!string.IsNullOrEmpty(event_value))
 				this.event_value = event_value;
 
+		}
+
+		public GoedleAtom(string app_key, 
+			string user_id, int ts, 
+			string event_name,
+			string anomynous_id) {
+
+
+			this.app_key = app_key;
+			this.user_id = user_id; 
+			this.ts = ts;
+			this.event_name = event_name;
+			if (!string.IsNullOrEmpty(anomynous_id))
+				this.anomynous_id = anomynous_id;
+
+			// This is true if event_value is NaN
+			this.timezone = Int32.MaxValue;
 		}
 
 		public GoedleAtom(string app_key, 
