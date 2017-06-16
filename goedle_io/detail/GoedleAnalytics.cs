@@ -10,7 +10,7 @@ namespace goedle_sdk.detail
 		private string api_key = null;
 		private string app_key = null;
 		private string user_id = null;
-		private string anonmynous_id = null;
+		private string anonymous_id = null;
 		private string app_version = null;
 
 		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version)
@@ -24,9 +24,9 @@ namespace goedle_sdk.detail
 		}
 
 		public void set_user_id(string user_id){
-			this.anonmynous_id = this.user_id;
+			this.anonymous_id = this.user_id;
 			this.user_id = user_id;
-			track (GoedleConstants.IDENTIFY, null, null, true, null, null, this.anonmynous_id);
+			track (GoedleConstants.IDENTIFY, null, null, false, null, null, this.anonymous_id);
 		}
 
 		public void track_launch ()
@@ -35,7 +35,7 @@ namespace goedle_sdk.detail
 		}
 
 
-		public void track (string event_name, string event_id, string event_value, bool launch, string trait_key, string trait_value, string anonmynous_id)
+		public void track (string event_name, string event_id, string event_value, bool launch, string trait_key, string trait_value, string anonymous_id)
 		{
 			GoedleHttpClient outer = new GoedleHttpClient ();
 			string[] pass = null;
@@ -45,8 +45,8 @@ namespace goedle_sdk.detail
 			GoedleAtom rt = null;
 			if (launch == true) {
 				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, timezone, GoedleConstants.BUILD_NR, app_version);
-			} else if(event_name=="identify" && anonmynous_id){
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, anonmynous_id);
+			} else if(event_name=="identify" && !string.IsNullOrEmpty (anonymous_id)){
+				rt = new GoedleAtom (app_key, this.user_id, ts, event_value, anonymous_id);
 			} 
 			else {
 				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, trait_key, trait_value);
@@ -79,7 +79,7 @@ namespace goedle_sdk.detail
 
 		public void track (string event_name, string event_id, string event_value, string trait_key, string trait_value)
 		{
-			track (GoedleConstants.IDENTIFY, null, null, false, trait_key, trait_value);
+			track (GoedleConstants.IDENTIFY, null, null, false, trait_key, trait_value, null);
 		}
 
 
