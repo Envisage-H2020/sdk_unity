@@ -29,7 +29,7 @@ You can skip the first step if you installed the SDK via the Asset Store.
 
 Afterward, you are ready to start and add the tracking points all over neuralgic positions in your Unity app.
 
-#Tracking Concept
+# Tracking Concept
 
 We typically use two main variables to track an event. The first is the action, e.g., view, share, like these variables are the specific actions which are done by a user. The second variable further specifies the action e.g., product, intro, category, user. These two variables are concatenated and delimited with a `.`. Note however that a specifier is not mandatory and we also support hierarchies with more than two levels.
 
@@ -44,7 +44,7 @@ The event name would be `finish.level`, the event id could be `level-12` and the
 Where 65 would be the duration in seconds.
 
 
-##Game State
+## Game State
 
 If you want to track a game state. We need additional preparation of your code.
 You need two global variables
@@ -72,7 +72,7 @@ void Update () {
 
 Please name the event `game.state`, so it can be identified as such.
 
-#Tracking Code
+# Tracking Code
 
 Add to the header of your class file 
 
@@ -82,7 +82,7 @@ using goedle_sdk;
 ---
 We have three different tracking signatures:
 
-##Event Tracking
+## Event Tracking
 
 Tracking a single event.
 
@@ -104,9 +104,9 @@ Tracking a single event with an identifier and a value.
 GoedleAnalytics.track ("finish.round", "round_12", "65");
 ```
 
-##User information
+## User data
 
-###User Id
+### User id
 
 ```
 GoedleAnalytics.setUserId ("unique_user_id");
@@ -116,7 +116,7 @@ If you don't set a user id, we create one for you. But, the automatically create
 
 ### Traits
 
-!!!Information For now, we only support "first_name" and "last_name" as a trait and additional user information.
+!!! Information For now, we only support "first_name" and "last_name" as a trait and additional user information.
 
 ```
 GoedleAnalytics.trackTraits ("first_name", playerName);
