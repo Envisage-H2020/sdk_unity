@@ -79,7 +79,7 @@ Add to the header of your class file
 ```
 using goedle_sdk;
 ```
----
+
 We have three different tracking signatures:
 
 ## Event Tracking
@@ -87,19 +87,32 @@ We have three different tracking signatures:
 Tracking a single event.
 
 ```
+GoedleAnalytics.track ("<event_name>");
+```
+
+Example
+```
 GoedleAnalytics.track ("start.game");
 ```
 
-
+---
 Tracking a single event with an identifier.
 
+```
+GoedleAnalytics.track ("<event_name>", "<event_id>");
+```
+Example
 ```
 GoedleAnalytics.track ("reached.level", "level-2");
 ```
 
-
+---
 Tracking a single event with an identifier and a value.
 
+```
+GoedleAnalytics.track ("<event_name>", "<event_id>", "<event_value>");
+```
+Example
 ```
 GoedleAnalytics.track ("finish.round", "round_12", "65");
 ```
@@ -109,7 +122,11 @@ GoedleAnalytics.track ("finish.round", "round_12", "65");
 ### User id
 
 ```
-GoedleAnalytics.setUserId ("unique_user_id");
+GoedleAnalytics.setUserId ("<unique_user_id>");
+```
+Example
+```
+GoedleAnalytics.setUserId ("<player_777>");
 ```
 
 If you don't set a user id, we create one for you. But, the automatically created user ids are only session based. This is done, because of privacy reasons.
@@ -118,17 +135,46 @@ If you don't set a user id, we create one for you. But, the automatically create
 
 !!! Information For now, we only support "first_name" and "last_name" as a trait and additional user information.
 
-```
-GoedleAnalytics.trackTraits ("first_name", playerName);
-```
-
-```
-GoedleAnalytics.trackTraits ("last_name", playerName);
-```
+---
 
 
+Please use `"first_name"` is, otherwise the first_name will not be recognized as a user information.
+```
+GoedleAnalytics.trackTraits ("first_name", "<play_first_name>");
+```
+Example
+```
+GoedleAnalytics.trackTraits ("first_name", "Hans");
+```
+
+---
+Please use `"last_name"` is, otherwise the last_name will not be recognized as a user information.
+```
+GoedleAnalytics.trackTraits ("last_name", "<player_last_name>");
+```
+
+Example
+```
+GoedleAnalytics.trackTraits ("last_name", "Smith");
+```
+
+---
+Please use `"email"` is, otherwise the email will not be recognized as a user information.
+
+```
+GoedleAnalytics.trackTraits ("email", "<email_address>");
+```
+
+Example
+```
+GoedleAnalytics.trackTraits ("email", "hans@gmail.com");
+```
 ### Group
-
+Please use `"group"` is, otherwise a group will not be recognized as a group.
 ```
-GoedleAnalytics.track ("group", "guild", playerGuildName);
+GoedleAnalytics.track ("group", "<group_type>", "<group_name>");
+```
+Example
+```
+GoedleAnalytics.track ("group", "guild", "Moon Guard");
 ```
