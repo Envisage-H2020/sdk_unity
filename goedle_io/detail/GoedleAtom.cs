@@ -140,13 +140,12 @@ namespace goedle_sdk.detail
 			goedleAtom.Add ("user_id", this.user_id);
 			goedleAtom.Add ("ts", this.ts);
 			goedleAtom.Add ("event", this.event_name);
+			goedleAtom.Add ("build_nr", this.build_nr);
+			goedleAtom.Add ("app_version", this.app_version);
+
 			if (!string.IsNullOrEmpty (anonymous_id)) {
 				goedleAtom.Add ("anonymous_id", this.anonymous_id);
 			}
-			if (this.build_nr != Int32.MaxValue)
-				goedleAtom.Add ("build_nr", this.build_nr);
-			if (!string.IsNullOrEmpty (app_version))
-				goedleAtom.Add ("app_version", this.app_version);
 			if (this.timezone != Int32.MaxValue)
 				goedleAtom.Add ("timezone", this.timezone);
 			if (!string.IsNullOrEmpty (event_id))
