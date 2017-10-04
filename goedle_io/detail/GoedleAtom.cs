@@ -20,7 +20,7 @@ namespace goedle_sdk.detail
 		private string event_value = null;
 		private int timezone;
 		private string event_id = null;
-		private int build_nr;
+		private int build_nr = GoedleConstants.BUILD_NR;
 		private string trait_key = null;
 		private string trait_value = null;
 		private string app_version = null;
@@ -33,7 +33,6 @@ namespace goedle_sdk.detail
 		                  string event_id, 
 		                  string event_value,
 		                  int timezone, 
-		                  int build_nr,
 		                  string app_version)
 		{
 			//ALWAYS
@@ -51,7 +50,6 @@ namespace goedle_sdk.detail
 			//ONLAUNCH
 			// The Timzone is in seconds and with -1, so we have to transform it
 			this.timezone = timezone;
-			this.build_nr = build_nr;
 			if (!string.IsNullOrEmpty (event_id))
 				this.event_id = event_id;
 			if (!string.IsNullOrEmpty (event_value))
@@ -74,7 +72,6 @@ namespace goedle_sdk.detail
 			if (!string.IsNullOrEmpty (anonymous_id))
 				this.anonymous_id = anonymous_id;
 			this.timezone = Int32.MaxValue;
-			this.build_nr = Int32.MaxValue;
 			this.app_version = app_version;
 
 		}
@@ -96,7 +93,6 @@ namespace goedle_sdk.detail
 			if (!string.IsNullOrEmpty (event_value))
 				this.event_value = event_value;
 			this.timezone = Int32.MaxValue;
-			this.build_nr = Int32.MaxValue;
 			this.app_version = app_version;
 
 		}
@@ -126,7 +122,6 @@ namespace goedle_sdk.detail
 			if (!string.IsNullOrEmpty (trait_value))
 				this.trait_value = trait_value;
 			this.timezone = Int32.MaxValue;
-			this.build_nr = Int32.MaxValue;
 			this.app_version = app_version;
 
 		}
@@ -140,7 +135,7 @@ namespace goedle_sdk.detail
 			goedleAtom.Add ("user_id", this.user_id);
 			goedleAtom.Add ("ts", this.ts);
 			goedleAtom.Add ("event", this.event_name);
-			goedleAtom.Add ("build_nr", this.build_nr);
+			goedleAtom.Add ("build_nr", build_nr);
 			goedleAtom.Add ("app_version", this.app_version);
 
 			if (!string.IsNullOrEmpty (anonymous_id)) {

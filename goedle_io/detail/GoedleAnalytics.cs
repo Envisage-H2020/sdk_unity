@@ -48,7 +48,7 @@ namespace goedle_sdk.detail
 			int timezone = (int)(((DateTime.UtcNow - DateTime.Now).TotalSeconds) * -1 * 1000);
 			GoedleAtom rt = null;
 			if (launch == true) {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, timezone, GoedleConstants.BUILD_NR, app_version);
+				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, timezone, app_version);
 			} else if (event_name == "identify" && !string.IsNullOrEmpty (anonymous_id)) {
 				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, anonymous_id, app_version);
 			} else if (event_name == "identify") {
