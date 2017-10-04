@@ -29,6 +29,10 @@ namespace goedle_sdk.detail
 			track (GoedleConstants.IDENTIFY, null, null, false, null, null, this.anonymous_id);
 		}
 
+		public void set_app_version(string app_version){
+			this.app_version = app_version;
+		}
+
 		public void track_launch ()
 		{
 			track (GoedleConstants.EVENT_NAME_INIT, null, null, true, null, null, null);
@@ -46,11 +50,11 @@ namespace goedle_sdk.detail
 			if (launch == true) {
 				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, timezone, GoedleConstants.BUILD_NR, app_version);
 			} else if (event_name == "identify" && !string.IsNullOrEmpty (anonymous_id)) {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, anonymous_id);
+				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, anonymous_id, app_version);
 			} else if (event_name == "identify") {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, trait_key, trait_value);
+				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, app_version, trait_key, trait_value);
 			} else {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value);
+				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, app_version);
 			}
 			if (rt == null) {
 				Console.Write ("Data Object is None, there must be an error in the SDK!");

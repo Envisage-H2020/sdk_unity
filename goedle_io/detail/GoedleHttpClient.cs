@@ -16,7 +16,6 @@ namespace goedle_sdk.detail
 		{
 		}
 			
-		//public async void send(string[] pass)
 		public void send(string[] pass)
 			{
 			Dictionary<string, string> headers = 

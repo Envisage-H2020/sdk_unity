@@ -36,8 +36,10 @@ namespace goedle_sdk
         public string app_key = "";
         [Tooltip("The api_key of the goedle.io project.")]
         public string api_key = "";
-        [Tooltip("The api_key of the goedle.io project.")]
-        public string disable = "";
+		[Tooltip("Enable (True)/ Disable(False) tracking with goedle.io, default is True")]
+		public string DISABLE_GOEDLE = "";
+		[Tooltip("You can specify an app_version here.")]
+		public string app_version = "";
         #endregion
         /*! \endcond */
 
@@ -114,6 +116,20 @@ namespace goedle_sdk
 			#endif
 		}
 
+        /// <summary>
+        /// Sets an custom app_version.
+        /// </summary>
+        /// <param name="app_version">the name of the app_version</param>
+        public static void track(string app_version)
+        {
+            app_version = app_version
+            #if !DISABLE_GOEDLE
+            if (tracking_enabled)
+                instance.set_app_version(app_version);
+            #endif
+        }
+
+
 
 		#region internal
 		static goedle_sdk.detail.GoedleAnalytics gio_interface;
@@ -135,7 +151,9 @@ namespace goedle_sdk
             Debug.LogWarning("Your Unity version does not support native plugins. Disabling goedle.io.");
             #endif
 			System.Guid user_id = System.Guid.NewGuid();
-			string app_version = Application.version;
+
+			if (String.IsNullOrWhiteSpace(app_version))
+				app_version = Application.version;
 
 			if (tracking_enabled && gio_interface  == null) {				
 				gio_interface = new goedle_sdk.detail.GoedleAnalytics (api_key, app_key, user_id.ToString("D"), app_version);

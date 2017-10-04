@@ -8,7 +8,6 @@ namespace goedle_sdk.detail
 		/* NOT YET IMPLEMENTED
 		 *
 		private string dev_version;
-		private string app_version = null;
 		private string screen = null;
 		private string uuid = null;
 		private string device_type = null;
@@ -64,10 +63,10 @@ namespace goedle_sdk.detail
 		                  string user_id, 
 						  int ts, 
 		                  string event_name,
-						  string anonymous_id)
+						  string anonymous_id,
+		                  string app_version)
 		{
 
-			Console.Write (anonymous_id);
 			this.app_key = app_key;
 			this.user_id = user_id; 
 			this.ts = ts;
@@ -76,6 +75,7 @@ namespace goedle_sdk.detail
 				this.anonymous_id = anonymous_id;
 			this.timezone = Int32.MaxValue;
 			this.build_nr = Int32.MaxValue;
+			this.app_version = app_version;
 
 		}
 
@@ -84,7 +84,8 @@ namespace goedle_sdk.detail
 						  int ts, 
 		                  string event_name, 
 		                  string event_id, 
-		                  string event_value)
+		                  string event_value,
+		                  string app_version)
 		{
 			this.app_key = app_key;
 			this.user_id = user_id; 
@@ -96,6 +97,7 @@ namespace goedle_sdk.detail
 				this.event_value = event_value;
 			this.timezone = Int32.MaxValue;
 			this.build_nr = Int32.MaxValue;
+			this.app_version = app_version;
 
 		}
 
@@ -104,7 +106,8 @@ namespace goedle_sdk.detail
 			int ts, 
 			string event_name, 
 			string event_id, 
-			string event_value, 
+			string event_value,
+			string app_version,
 			string trait_key, 
 			string trait_value)
 		{
@@ -124,6 +127,7 @@ namespace goedle_sdk.detail
 				this.trait_value = trait_value;
 			this.timezone = Int32.MaxValue;
 			this.build_nr = Int32.MaxValue;
+			this.app_version = app_version;
 
 		}
 
