@@ -36,10 +36,14 @@ namespace goedle_sdk
         public string app_key = "";
         [Tooltip("The api_key of the goedle.io project.")]
         public string api_key = "";
-		[Tooltip("Enable (True)/ Disable(False) tracking with goedle.io, default is True")]
+		[Tooltip("Enable (True)/ Disable (False) tracking with goedle.io, default is True")]
 		public string DISABLE_GOEDLE = "";
 		[Tooltip("You can specify an app_version here.")]
 		public string app_version = "";
+        [Tooltip("Enable (True) / Disable(False) additional tracking with Google Analytics")]
+        public string ENABLE_GA = "";
+        [Tooltip("Google Analytics Tracking Id")]
+        public string ENABLE_GA = "";
         #endregion
         /*! \endcond */
 

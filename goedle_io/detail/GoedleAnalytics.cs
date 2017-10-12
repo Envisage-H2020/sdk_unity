@@ -12,14 +12,15 @@ namespace goedle_sdk.detail
 		private string user_id = null;
 		private string anonymous_id = null;
 		private string app_version = null;
+		private string ga_tracking_id = null;
 
-		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version)
+		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version, string ga_tracking_id)
 		{
 			this.api_key = api_key;
 			this.app_key = app_key;
 			this.user_id = user_id;
 			this.app_version = app_version;
-
+			this.ga_tracking_id = ga_tracking_id;
 			track_launch ();
 		}
 
@@ -62,6 +63,45 @@ namespace goedle_sdk.detail
 				pass = encodeToUrlParameter (rt.getGoedleAtomDictionary ());
 			}
 			outer.send (pass);
+			
+			// Sending tp Google Analytics for now we only support the Event tracking
+			type = "event"
+
+			if (!string.IsNullOrEmpty(this.ga_tracking_id))
+				trackGoogleAnalytics(string event_name, string event_id, string event_value)
+		}
+
+		public void trackGoogleAnalytics (string event_name, string event_id, string event_value, string anonymous_id, string type){
+			GoogleWrappedHTTPClient outer = new GoedleHttpClient ();
+			if (string.IsNullOrEmpty(event_name)) throw new ArgumentNullException("Event is null");
+
+			// the request body we want to send
+            var postData = new Dictionary<string, string>
+                           {
+                               { "v", this.app_version },
+                               { "tid", this.ga_tracking_id },
+                               { "cid", this.user_id },
+                               { "t", type },
+                               // For now we don't have a category, in the future this could be sth. like gamestate, interaction, flow_controll
+                               { "ec", "goedle_interaction" },
+                               { "ea", event_name },
+                           };
+
+            // This is the Event label in Google Analytics
+                           
+			if (!string.IsNullOrEmpty(event_id))
+            {
+                postData.Add("el", event_id);
+            }
+            if (event_value.HasValue)
+            {
+                postData.Add("ev", event_value.ToString());
+            }
+            if (category == "identify" && !string.IsNullOrEmpty(anonymous_id) )
+                        {
+							postData.Add("uid", this.user_id);
+                        }
+			outer.send (postData);
 		}
 
 		public void track (string event_name)
@@ -132,6 +172,14 @@ namespace goedle_sdk.detail
 		{
 			return (Int32)(DateTime.UtcNow.Subtract (new DateTime (1970, 1, 1))).TotalSeconds;
 		}
+
+		private enum HitType
+        {
+            // ReSharper disable InconsistentNaming
+            @event,
+            @pageview,
+            // ReSharper restore InconsistentNaming
+        }
 
 	}
 }
