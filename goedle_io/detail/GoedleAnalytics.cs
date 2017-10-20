@@ -2,6 +2,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace goedle_sdk.detail
 {
@@ -14,9 +16,10 @@ namespace goedle_sdk.detail
 		private string app_version = null;
 		private string ga_tracking_id = null;
 		private string app_name = null;
+		//private string locale = null;
 
 
-		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name)
+		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name)//, string locale)
 		{
 			this.api_key = api_key;
 			this.app_key = app_key;
@@ -24,6 +27,7 @@ namespace goedle_sdk.detail
 			this.app_version = app_version;
 			this.ga_tracking_id = ga_tracking_id;
 			this.app_name = app_name;
+			//this.locale = GoedleLanguageMapping.GetLanguageCode (locale);
 			track_launch ();
 		}
 
@@ -79,7 +83,6 @@ namespace goedle_sdk.detail
 		public void trackGoogleAnalytics (string event_name, string event_id, string event_value, string anonymous_id, string type){
 			GoogleWrappedHttpClient outer = new GoogleWrappedHttpClient ();
 			if (string.IsNullOrEmpty(event_name)) throw new ArgumentNullException("Event is null");
-
 			// the request body we want to send
             var postData = new Dictionary<string, string>
                            {
@@ -90,8 +93,9 @@ namespace goedle_sdk.detail
                                { "cid", this.user_id },
                                { "t", type },
                                // For now we don't have a category, in the future this could be sth. like gamestate, interaction, flow_controll
-                               { "ec", "goedle_interaction" },
+								{ "ec", getSceneName() },
                                { "ea", event_name },
+								//{"ul", this.locale},
                            };
 
             // This is the Event label in Google Analytics
@@ -192,6 +196,13 @@ namespace goedle_sdk.detail
 		public int getTimeStamp ()
 		{
 			return (Int32)(DateTime.UtcNow.Subtract (new DateTime (1970, 1, 1))).TotalSeconds;
+		}
+
+		public string getSceneName()
+		{
+			Scene scene = SceneManager.GetActiveScene();
+			Console.WriteLine(scene.name);
+			return scene.name;
 		}
 
 		private enum HitType

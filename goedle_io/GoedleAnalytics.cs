@@ -159,6 +159,8 @@ namespace goedle_sdk
 					app_name = Application.productName;
 				else 
 					app_name = app_version;
+
+			//string locale = Application.systemLanguage.ToString();
 			
 			
 			if (tracking_enabled && gio_interface  == null) {				
