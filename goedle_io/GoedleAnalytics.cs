@@ -36,10 +36,16 @@ namespace goedle_sdk
         public string app_key = "";
         [Tooltip("The api_key of the goedle.io project.")]
         public string api_key = "";
-		[Tooltip("Enable (True)/ Disable(False) tracking with goedle.io, default is True")]
-		public string DISABLE_GOEDLE = "";
+		[Tooltip("Enable (True)/ Disable (False) tracking with goedle.io, default is True")]
+		public bool ENABLE_GOEDLE = true;
 		[Tooltip("You can specify an app_version here.")]
-		public string app_version = "";
+		public string APP_VERSION = "";
+		[Tooltip("You should specify an app_name here.")]
+		public string APP_NAME = "";
+        [Tooltip("Enable (True) / Disable(False) additional tracking with Google Analytics")]
+        public bool ENABLE_GA = true;
+        [Tooltip("Google Analytics Tracking Id")]
+        public string GA_TRACKIND_ID = "";
         #endregion
         /*! \endcond */
 
@@ -52,8 +58,7 @@ namespace goedle_sdk
         /// <param name="event">the name of the event to send</param>
         public static void track(string eventName)
         {
-            #if !DISABLE_GOEDLE
-            if (tracking_enabled)
+			#if !ENABLE_GOEDLE
 				instance.track(eventName);
             #endif
         }
@@ -66,8 +71,7 @@ namespace goedle_sdk
 
 		public static void track(string eventName, string eventId)
 		{
-			#if !DISABLE_GOEDLE
-			if (tracking_enabled)
+			#if !ENABLE_GOEDLE
 				instance.track(eventName,eventId);
 			#endif
 		}
@@ -81,8 +85,7 @@ namespace goedle_sdk
 
 		public static void track(string eventName, string eventId, string event_value)
 		{
-			#if !DISABLE_GOEDLE
-			if (tracking_enabled)
+			#if !ENABLE_GOEDLE
 				instance.track(eventName,eventId,event_value);
 			#endif
 		}
@@ -96,8 +99,7 @@ namespace goedle_sdk
 
 		public static void trackTraits(string traitKey, string traitValue)
 		{
-			#if !DISABLE_GOEDLE
-			if (tracking_enabled)
+			#if !ENABLE_GOEDLE
 				instance.track(null, null, null, traitKey, traitValue);
 			#endif
 		}
@@ -110,8 +112,7 @@ namespace goedle_sdk
 
 		public static void setUserId(string user_id)
 		{
-			#if !DISABLE_GOEDLE
-			if (tracking_enabled)
+			#if !ENABLE_GOEDLE
 				instance.set_user_id(user_id);
 			#endif
 		}
@@ -120,11 +121,9 @@ namespace goedle_sdk
         /// Sets an custom app_version.
         /// </summary>
         /// <param name="app_version">the name of the app_version</param>
-        public static void track(string app_version)
+        public static void setAppVersion(string app_version)
         {
-            app_version = app_version
-            #if !DISABLE_GOEDLE
-            if (tracking_enabled)
+			#if !ENABLE_GOEDLE
                 instance.set_app_version(app_version);
             #endif
         }
@@ -146,26 +145,33 @@ namespace goedle_sdk
         void Awake()
         {
             DontDestroyOnLoad(this);
-            #if DISABLE_GOEDLE
+			#if ENABLE_GOEDLE
             tracking_enabled = false;
             Debug.LogWarning("Your Unity version does not support native plugins. Disabling goedle.io.");
             #endif
 			System.Guid user_id = System.Guid.NewGuid();
-
-			if (String.IsNullOrWhiteSpace(app_version))
+			string app_version = APP_VERSION;
+			string app_name = APP_NAME;
+			if (String.IsNullOrEmpty(app_version))
 				app_version = Application.version;
+			if (String.IsNullOrEmpty(app_name))
+				if (String.IsNullOrEmpty(app_name))
+					app_name = Application.productName;
+				else 
+					app_name = app_version;
 
+			//string locale = Application.systemLanguage.ToString();
+			
+			
 			if (tracking_enabled && gio_interface  == null) {				
-				gio_interface = new goedle_sdk.detail.GoedleAnalytics (api_key, app_key, user_id.ToString("D"), app_version);
+				gio_interface = new goedle_sdk.detail.GoedleAnalytics (api_key, app_key, user_id.ToString("D"), app_version, GA_TRACKIND_ID, app_name);
             }
         }
 
         void OnDestroy()
         {
-			if (tracking_enabled)
-			{
+
 			// Future Usage
-			}
         }
 
 		#endregion

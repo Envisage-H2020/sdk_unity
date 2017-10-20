@@ -2,6 +2,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace goedle_sdk.detail
 {
@@ -12,14 +14,20 @@ namespace goedle_sdk.detail
 		private string user_id = null;
 		private string anonymous_id = null;
 		private string app_version = null;
+		private string ga_tracking_id = null;
+		private string app_name = null;
+		//private string locale = null;
 
-		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version)
+
+		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name)//, string locale)
 		{
 			this.api_key = api_key;
 			this.app_key = app_key;
 			this.user_id = user_id;
 			this.app_version = app_version;
-
+			this.ga_tracking_id = ga_tracking_id;
+			this.app_name = app_name;
+			//this.locale = GoedleLanguageMapping.GetLanguageCode (locale);
 			track_launch ();
 		}
 
@@ -42,6 +50,7 @@ namespace goedle_sdk.detail
 		public void track (string event_name, string event_id, string event_value, bool launch, string trait_key, string trait_value, string anonymous_id)
 		{
 			GoedleHttpClient outer = new GoedleHttpClient ();
+			bool ga_active = !String.IsNullOrEmpty (this.ga_tracking_id);
 			string[] pass = null;
 			int ts = getTimeStamp ();
 			// -1 because c# returns -1 for UTC +1 , * 1000 from Seconds to Milliseconds
@@ -50,7 +59,7 @@ namespace goedle_sdk.detail
 			if (launch == true) {
 				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, timezone, app_version);
 			} else if (event_name == "identify" && !string.IsNullOrEmpty (anonymous_id)) {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, anonymous_id, app_version);
+				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, anonymous_id, app_version, ga_active);
 			} else if (event_name == "identify") {
 				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, app_version, trait_key, trait_value);
 			} else {
@@ -62,7 +71,63 @@ namespace goedle_sdk.detail
 				pass = encodeToUrlParameter (rt.getGoedleAtomDictionary ());
 			}
 			outer.send (pass);
+			
+			// Sending tp Google Analytics for now we only support the Event tracking
+			string type = "event";
+
+			if (ga_active)
+				trackGoogleAnalytics (event_name, event_id, event_value, anonymous_id, type);
+		
 		}
+
+		public void trackGoogleAnalytics (string event_name, string event_id, string event_value, string anonymous_id, string type){
+			GoogleWrappedHttpClient outer = new GoogleWrappedHttpClient ();
+			if (string.IsNullOrEmpty(event_name)) throw new ArgumentNullException("Event is null");
+			// the request body we want to send
+            var postData = new Dictionary<string, string>
+                           {
+							   { "v", GoedleConstants.GOOGLE_MP_VERSION.ToString() },
+							   {"av", this.app_version},
+								{"an", this.app_name},
+                               { "tid", this.ga_tracking_id },
+                               { "cid", this.user_id },
+                               { "t", type },
+                               // For now we don't have a category, in the future this could be sth. like gamestate, interaction, flow_controll
+								{ "ec", getSceneName() },
+                               { "ea", event_name },
+								//{"ul", this.locale},
+                           };
+
+            // This is the Event label in Google Analytics
+                           
+			if (!String.IsNullOrEmpty(event_id))
+            {
+                postData.Add("el", event_id);
+            }
+			if (IsFloatOrInt(event_value))
+            {
+                postData.Add("ev", event_value);
+            }
+			if (event_name == "identify" && !String.IsNullOrEmpty(anonymous_id) )
+                        {
+							postData.Add("uid", this.user_id);
+							outer.send (postData);
+							// For mapping after identify
+							// Otherwise we will lost the old client id
+							postData.Remove ("cid");
+							postData.Add("cid", this.anonymous_id);
+							outer.send (postData);
+                        }
+			else
+				outer.send (postData);
+		}
+
+		public bool IsFloatOrInt(string value) {
+			int intValue;
+			float floatValue;
+			return Int32.TryParse(value, out intValue) || float.TryParse(value, out floatValue);
+		}
+
 
 		public void track (string event_name)
 		{
@@ -132,6 +197,21 @@ namespace goedle_sdk.detail
 		{
 			return (Int32)(DateTime.UtcNow.Subtract (new DateTime (1970, 1, 1))).TotalSeconds;
 		}
+
+		public string getSceneName()
+		{
+			Scene scene = SceneManager.GetActiveScene();
+			Console.WriteLine(scene.name);
+			return scene.name;
+		}
+
+		private enum HitType
+        {
+            // ReSharper disable InconsistentNaming
+            @event,
+            @pageview,
+            // ReSharper restore InconsistentNaming
+        }
 
 	}
 }
