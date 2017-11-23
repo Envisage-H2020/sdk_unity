@@ -16,10 +16,13 @@ namespace goedle_sdk.detail
 		private string app_version = null;
 		private string ga_tracking_id = null;
 		private string app_name = null;
+		private int cd1 = 0:
+		private int cd2 = 0;
+		private string cd_event = null;
 		//private string locale = null;
 
 
-		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name)//, string locale)
+		public GoedleAnalytics (string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name, int cd1, int cd2, string cd_event)//, string locale)
 		{
 			this.api_key = api_key;
 			this.app_key = app_key;
@@ -27,6 +30,9 @@ namespace goedle_sdk.detail
 			this.app_version = app_version;
 			this.ga_tracking_id = ga_tracking_id;
 			this.app_name = app_name;
+			this.cd1 = cd1;
+			this.cd2 = cd2;
+			this.cd_event = cd_event;
 			//this.locale = GoedleLanguageMapping.GetLanguageCode (locale);
 			track_launch ();
 		}
@@ -77,7 +83,6 @@ namespace goedle_sdk.detail
 
 			if (ga_active)
 				trackGoogleAnalytics (event_name, event_id, event_value, anonymous_id, type);
-		
 		}
 
 		public void trackGoogleAnalytics (string event_name, string event_id, string event_value, string anonymous_id, string type){
@@ -92,11 +97,11 @@ namespace goedle_sdk.detail
                                { "tid", this.ga_tracking_id },
                                { "cid", this.user_id },
                                { "t", type },
-                               // For now we don't have a category, in the future this could be sth. like gamestate, interaction, flow_controll
 								{ "ec", getSceneName() },
                                { "ea", event_name },
 								//{"ul", this.locale},
                            };
+
 
             // This is the Event label in Google Analytics
                            
@@ -118,6 +123,12 @@ namespace goedle_sdk.detail
 							postData.Add("cid", this.anonymous_id);
 							outer.send (postData);
                         }
+            else if (event_name == "group" && cd1 != 0 && cd2 != 0 && cd1 != cd2){
+							postData.Remove ("el");
+							postData.Remove ("ev");
+							postData.Add(String.Concat("cd", cd1);, this.event_id);
+							postData.Add(String.Concat("cd", cd2);, this.event_value);
+            }
 			else
 				outer.send (postData);
 		}
@@ -151,6 +162,11 @@ namespace goedle_sdk.detail
 		{
 			track (event_name, event_id, event_value, false, null, null, null);
 
+		}
+
+		public void group (string event_name, string event_id, string event_value)
+		{
+			track (event_name, event_id, event_value, false, null, null, null);
 		}
 
 
