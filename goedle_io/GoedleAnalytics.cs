@@ -49,9 +49,9 @@ namespace goedle_sdk
         [Tooltip("Google Analytics Custom Dimension Event Listener. This is for group call support.")]
         public string GA_CD_EVENT = null;
         [Tooltip("Google Analytics Number of Custom Dimension for Group type. (To set this you need a configured custom dimension in Google Analytics)")]
-        public int GA_CD_1 = null;
+        public int GA_CD_1 = 0;
         [Tooltip("Google Analytics Number of Custom Dimension for Group member. (To set this you need a configured custom dimension in Google Analytics)")]
-        public int GA_CD_2 = null;
+        public int GA_CD_2 = 0;
         #endregion
         /*! \endcond */
 
@@ -106,10 +106,23 @@ namespace goedle_sdk
 		public static void trackTraits(string traitKey, string traitValue)
 		{
 			#if !ENABLE_GOEDLE
-				instance.track(null, null, null, traitKey, traitValue);
+				instance.trackTraits(null, null, null, traitKey, traitValue);
 			#endif
 		}
 
+
+		/// <summary>
+		/// Group tracking function for a user.
+		/// </summary>
+		/// <param name="group_type">The entity type, like school or company</param>
+		/// <param name="group_member">The name or identifier for the entity, like department number, class number</param>
+
+		public static void trackGroup(string group_type, string group_member)
+		{
+			#if !ENABLE_GOEDLE
+			instance.trackGroup(group_type, group_member);
+			#endif
+		}
 
 		/// <summary>
 		/// set user id function for a user.
