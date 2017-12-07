@@ -4,7 +4,7 @@ We now give a brief introduction how easy our plugin for Unity can be implemente
 
 ---
 
-You can download the SDK via the Unity Asset Store [here](http://u3d.as/RXw).
+You can download the SDK [here](https://github.com/Envisage-H2020/sdk_unity/blob/master/goedle_io_sdk_v5.unitypackage).
 
 To get an APP and API key please signup on [goedle.io](http://www.goedle.io).
 
