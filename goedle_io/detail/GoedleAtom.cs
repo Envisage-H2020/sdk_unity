@@ -119,6 +119,7 @@ namespace goedle_sdk.detail
 			this.user_id = user_id; 
 			this.ts = ts;
 			this.event_name = event_name;
+			this.app_version = app_version;
 			if (!string.IsNullOrEmpty (event_id))
 				this.event_id = event_id;
 			if (!string.IsNullOrEmpty (event_value))
