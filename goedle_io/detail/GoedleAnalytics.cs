@@ -61,16 +61,7 @@ namespace goedle_sdk.detail
 			int ts = getTimeStamp ();
 			// -1 because c# returns -1 for UTC +1 , * 1000 from Seconds to Milliseconds
 			int timezone = (int)(((DateTime.UtcNow - DateTime.Now).TotalSeconds) * -1 * 1000);
-			GoedleAtom rt = null;
-			if (launch == true) {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, timezone, app_version);
-			} else if (event_name == "identify" && !string.IsNullOrEmpty (this.anonymous_id)) {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, this.anonymous_id, app_version, ga_active);
-			} else if (event_name == "identify") {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, app_version, trait_key, trait_value);
-			} else {
-				rt = new GoedleAtom (app_key, this.user_id, ts, event_name, event_id, event_value, app_version);
-			}
+			GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, ts, event_name, event_id, event_value, timezone, app_version, this.anonymous_id, trait_key, trait_value, ga_active);
 			if (rt == null) {
 				Console.Write ("Data Object is None, there must be an error in the SDK!");
 			} else {
@@ -225,6 +216,10 @@ namespace goedle_sdk.detail
             @event,
             @pageview,
             // ReSharper restore InconsistentNaming
+        }
+
+        public static void Main(String[] args){
+
         }
 
 	}
