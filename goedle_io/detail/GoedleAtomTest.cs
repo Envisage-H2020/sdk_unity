@@ -40,7 +40,7 @@ namespace goedle_sdk.detail
             this.event_id = null;
             this.event_value = null;
             this.ga_active = false;
-            this.anonymous_id = "123e4567-e89b-12d3-a456-426655440000";
+            this.anonymous_id = null;
             this.trait_key = null;
             this.trait_value = null;
             this.goedleAtomExpected = new Dictionary<string, object>()
@@ -62,7 +62,7 @@ namespace goedle_sdk.detail
         [Test]
         public void CreateEventAtom() 
         {
-            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, trait_key, trait_value, this.ga_active);
+            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, this.trait_key, this.trait_value, this.ga_active);
             Dictionary<string, object> goedleAtom = rt.getGoedleAtomDictionary();
             CollectionAssert.AreEquivalent(goedleAtom, this.goedleAtomExpected);
         }
@@ -74,10 +74,11 @@ namespace goedle_sdk.detail
         [Test]
         public void CreateEventWithIdAtom() 
         {
-            this.goedleAtomExpected("event_id" , "test_event_id");
-            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, trait_key, trait_value, this.ga_active);
+            this.goedleAtomExpected.Add("event_id" , "test_event_id");
+            this.event_id = "test_event_id";
+            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, this.trait_key, this.trait_value, this.ga_active);
             Dictionary<string, object> goedleAtom = rt.getGoedleAtomDictionary();
-            CollectionAssert.AreEquivalent(goedleAtom, goedleAtomExpected);
+            CollectionAssert.AreEquivalent(goedleAtom, this.goedleAtomExpected);
         }
 
         /// <summary>
@@ -91,9 +92,9 @@ namespace goedle_sdk.detail
             this.goedleAtomExpected.Add("event_value" , "test_event_value");
             this.event_id = "test_event_id";
             this.event_value = "test_event_value";
-            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, trait_key, trait_value, this.ga_active);
+            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, this.trait_key, this.trait_value, this.ga_active);
             Dictionary<string, object> goedleAtom = rt.getGoedleAtomDictionary();
-            CollectionAssert.AreEquivalent(goedleAtom, goedleAtomExpected);
+            CollectionAssert.AreEquivalent(goedleAtom, this.goedleAtomExpected);
         }
 
         /// <summary>
@@ -103,11 +104,13 @@ namespace goedle_sdk.detail
         [Test]
         public void CreateEventIdentifyNoGAAtom() 
         {
-            this.goedleAtomExpected.Add ("event", "identify");
+            this.goedleAtomExpected["event"] =  "identify";
+            this.goedleAtomExpected["anonymous_id"] = "123e4567-e89b-12d3-a456-426655440000";
+            this.anonymous_id = "123e4567-e89b-12d3-a456-426655440000";
             this.event_name = "identify"; 
-            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, trait_key, trait_value, this.ga_active);
+            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, this.trait_key, this.trait_value, this.ga_active);
             Dictionary<string, object> goedleAtom = rt.getGoedleAtomDictionary();
-            CollectionAssert.AreEquivalent(goedleAtom, goedleAtomExpected);
+            CollectionAssert.AreEquivalent(goedleAtom, this.goedleAtomExpected);
         }
 
         /// <summary>
@@ -117,13 +120,16 @@ namespace goedle_sdk.detail
         [Test]
         public void CreateEventIdentifyGAAtom() 
         {
-            this.goedleAtomExpected.Add ("event", "identify");
-            this.goedleAtomExpected["anonymous_id"] = this.anonymous_id;
+            this.goedleAtomExpected["event"] =  "identify";
+            this.goedleAtomExpected["uuid"] = "123e4567-e89b-12d3-a456-426655440000";
+            this.goedleAtomExpected["anonymous_id"] = "123e4567-e89b-12d3-a456-426655440000";
             this.event_name = "identify";
+            this.anonymous_id = "123e4567-e89b-12d3-a456-426655440000";
+
             this.ga_active = true;
-            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, trait_key, trait_value, this.ga_active);
+            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, this.trait_key, this.trait_value, this.ga_active);
             Dictionary<string, object> goedleAtom = rt.getGoedleAtomDictionary();
-            CollectionAssert.AreEquivalent(goedleAtom, goedleAtomExpected);
+            CollectionAssert.AreEquivalent(goedleAtom, this.goedleAtomExpected);
         }
 
 
@@ -137,12 +143,12 @@ namespace goedle_sdk.detail
             this.event_name = "identify"; 
             this.trait_key = "first_name";
             this.trait_value = "Marc";
-            this.goedleAtomExpected.Add("event", "identify");
+            this.goedleAtomExpected["event"] = "identify";
             this.goedleAtomExpected.Add(trait_key , trait_value);
 
-            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, trait_key, trait_value, this.ga_active);
+            GoedleAtom rt = new GoedleAtom (this.app_key, this.user_id, this.ts, this.event_name, this.event_id, this.event_value, this.timezone, this.app_version, this.anonymous_id, this.trait_key, this.trait_value, this.ga_active);
             Dictionary<string, object> goedleAtom = rt.getGoedleAtomDictionary();
-            CollectionAssert.AreEquivalent(goedleAtom, goedleAtomExpected);
+            CollectionAssert.AreEquivalent(goedleAtom, this.goedleAtomExpected);
         }
     }
 }

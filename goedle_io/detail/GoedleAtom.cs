@@ -40,8 +40,11 @@ namespace goedle_sdk.detail
 						  bool ga_active)
 		{
 			this.app_key = app_key;
-			if (this.user_id == null) {
+			if (user_id == null) {
 				Console.Write ("Maybe the GoedleAPI.init(); isn`t called in the Application class. Or you don't have set the GoedleAPI.setUserId(userId)?");
+			}else
+			{
+				this.user_id = user_id;
 			}			
 			this.ts = ts;
 			this.event_name = event_name;
@@ -58,7 +61,7 @@ namespace goedle_sdk.detail
 				// This is for the google analytics case
 				if (ga_active)	
 					this.uuid = anonymous_id;
-			this.timezone = Int32.MaxValue;
+			this.timezone = timezone;
 			this.app_version = app_version;
 
 		}
@@ -74,21 +77,19 @@ namespace goedle_sdk.detail
 			goedleAtom.Add ("event", this.event_name);
 			goedleAtom.Add ("build_nr", build_nr);
 			goedleAtom.Add ("app_version", this.app_version);
-
+			goedleAtom.Add ("timezone", this.timezone);
 			/*if (!string.IsNullOrEmpty (this.locale))
 				goedleAtom.Add ("locale", this.locale);*/
-			if (!string.IsNullOrEmpty (anonymous_id))
+			if (!string.IsNullOrEmpty (this.anonymous_id))
 				goedleAtom.Add ("anonymous_id", this.anonymous_id);
-			if (!string.IsNullOrEmpty (uuid))
-				goedleAtom.Add ("uuid", this.anonymous_id);
-			if (this.timezone != Int32.MaxValue)
-				goedleAtom.Add ("timezone", this.timezone);
-			if (!string.IsNullOrEmpty (event_id))
+			if (!string.IsNullOrEmpty (this.uuid))
+				goedleAtom.Add ("uuid", this.uuid);
+			if (!string.IsNullOrEmpty (this.event_id))
 				goedleAtom.Add ("event_id", this.event_id);
-			if (!string.IsNullOrEmpty (event_value))
+			if (!string.IsNullOrEmpty (this.event_value))
 				goedleAtom.Add ("event_value", this.event_value);
 	
-			if (!string.IsNullOrEmpty (trait_key) && !string.IsNullOrEmpty (trait_value))
+			if (!string.IsNullOrEmpty (this.trait_key) && !string.IsNullOrEmpty (this.trait_value))
 				goedleAtom.Add (this.trait_key, this.trait_value);
 			return goedleAtom;
 		}
