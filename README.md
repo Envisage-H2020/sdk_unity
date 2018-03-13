@@ -1,5 +1,8 @@
 # Test setup for osx
 
+install nuget as packet manager for `C#`
+`brew install nuget`
+
 ## Export Paths
 Standard installation directory of Mono.Framework.
 
