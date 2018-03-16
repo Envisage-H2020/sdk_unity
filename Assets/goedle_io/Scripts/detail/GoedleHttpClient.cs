@@ -4,17 +4,18 @@ using System;
 using SimpleJSON;
 using UnityEngine.Networking;
 
-namespace goedle_sdk
+namespace goedle_sdk.detail
 {
 
     public interface IGoedleHttpClient
     {
-        JSONNode getStrategy(IUnityWebRequests www, string url);
-        void sendPost(IUnityWebRequests www, string url, string content, string authentification);
-        void sendGet(IUnityWebRequests www, string url);
-        IEnumerator getRequest(IUnityWebRequests www, string url);
-        IEnumerator getJSONRequest(IUnityWebRequests www, string url);
-        IEnumerator postJSONRequest(UnityWebRequest www, string url, string content, string authentification);
+        //JSONNode getStrategy(IUnityWebRequests www, string url);
+        void sendPost(string url, string content, string authentification);
+        void sendGet(string url);
+        void addUnityHTTPClient(IUnityWebRequests www);
+        IEnumerator getRequest(string url);
+        IEnumerator getStrategy(string app_key, string api_key);
+        IEnumerator postJSONRequest(string url, string content, string authentification);
     }
 
     public interface IUnityWebRequests
@@ -31,34 +32,39 @@ namespace goedle_sdk
 
     public class GoedleHttpClient: MonoBehaviour, IGoedleHttpClient 
 	{
+        IUnityWebRequests _www;
 
-        public GoedleHttpClient(){}
-
-        public void sendGet(IUnityWebRequests www, string url)
-        {
-            StartCoroutine(getJSONRequest(www, url));
+        public GoedleHttpClient(){
         }
 
+        public void addUnityHTTPClient(IUnityWebRequests www){
+            _www = www;
+        }
+
+        public void sendGet( string url)
+        {
+            StartCoroutine(getRequest( url));
+        }
+
+        /*
         public JSONNode getStrategy(IUnityWebRequests www, string url)
         {
-            StartCoroutine(getJSONRequest(www, url));
+            CoroutineWithData cd = new CoroutineWithData(this, getJSONRequest(www, url));
+            yield return cd.coroutine;
+            Debug.Log("result is " + cd.result);  //  'success' or 'fail'
+            yield return cd.result;
             // TODO RETURN JSON from REQUEST
-            return null;
+            //yield return StartCoroutine(getJSONRequest(www, url));
+        }
+        */
+        public void sendPost(string url, string content, string authentification)
+        {
+            StartCoroutine(postJSONRequest(url, content, authentification));
         }
 
-        public void sendPost(IUnityWebRequests www, string url, string content, string authentification)
+        public IEnumerator getRequest(string url)
         {
-            UnityWebRequest client = www as UnityWebRequest;
-            client = new UnityWebRequest(url, "POST");
-            Console.WriteLine(client.url);
-            Console.WriteLine(client.method);
-
-            StartCoroutine(postJSONRequest(client, url, content, authentification));
-        }
-
-        public IEnumerator getRequest(IUnityWebRequests www, string url)
-        {
-            UnityWebRequest client = (UnityWebRequest)www;
+            UnityWebRequest client = _www as UnityWebRequest;
 
             using (client = new UnityWebRequest(url, "GET"))
             {
@@ -70,42 +76,57 @@ namespace goedle_sdk
                 else
                 {
                     // Show results as text
-                    Debug.Log(client.downloadHandler.text);
+                    //Debug.Log(client.downloadHandler.text);
                     // Or retrieve results as binary data
-                    byte[] results = client.downloadHandler.data;
+                    //byte[] results = client.downloadHandler.data;
                 }
             }
         }
 
-        public IEnumerator getJSONRequest(IUnityWebRequests www, string url)
+        /*
+         Returns an JSONNode object this can be accessed via:
+         CoroutineWithData cd = new CoroutineWithData(this, LoadSomeStuff( ) );
+         yield return cd.coroutine;
+         Debug.Log("result is " + cd.result);  //  'JSONNode'
+         CoroutineWithData is in GoedleUtils
+         */
+        public IEnumerator getStrategy(string app_key, string api_key)
         {
-            UnityWebRequest client = (UnityWebRequest)www;
+            string url = GoedleUtils.getStrategyUrl(app_key, api_key);
+            UnityWebRequest client = _www as UnityWebRequest;
             using (client = new UnityWebRequest(url, "GET"))
             {
-                yield return www.SendWebRequest();
+                yield return client.SendWebRequest();
                 if (client.isNetworkError || client.isHttpError)
                 {
                     Debug.Log(client.error);
+                        yield return JSON.Parse("{\"error\": \" " + client.error + " \"}");
                 }
                 else
                 {
                     // Show results as text
                     Debug.Log(client.downloadHandler.text);
+                JSONNode strategy_json;
+                    try
+                    {
+                        strategy_json = JSON.Parse(client.downloadHandler.text);
+                    }
+                    catch(Exception e){
+                            strategy_json = "{\"error\": \" " + e.Message + " \"}";
+ 
+                    }
+                        yield return strategy_json;
                     // Or retrieve results as binary data
-                    byte[] results = client.downloadHandler.data;
+                    //byte[] results = client.downloadHandler.data;
                 }
             }
 
         }
 
-        public IEnumerator postJSONRequest(UnityWebRequest client, string url, string content ,string authentification)
+        public IEnumerator postJSONRequest( string url, string content ,string authentification)
 	    {
-            /*
-            Console.WriteLine(content);
-            Console.WriteLine(authentification);
-            Console.WriteLine(url);
-            */
-			//byte[] bytes = Encoding.UTF8.GetBytes(pass[0]);
+            UnityWebRequest client = _www as UnityWebRequest;
+            client = new UnityWebRequest(url, "POST");
             using (client)
             {
                 byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(content);
@@ -115,20 +136,19 @@ namespace goedle_sdk
                     client.SetRequestHeader("Authorization", authentification);
                 client.chunkedTransfer = false;
                 yield return client.SendWebRequest();
-                Console.WriteLine(client.responseCode);
-                Console.WriteLine(client.isNetworkError);
-                Console.WriteLine(client.isHttpError);
                 if (client.isNetworkError || client.isHttpError)
                 {
                     Debug.Log(client.error);
                 }
                 else
                 { 
-                   Debug.Log(content);
+                   //Debug.Log(content);
                 }
             }
 	    }
+
 	}
+
 }
 
 

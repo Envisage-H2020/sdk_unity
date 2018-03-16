@@ -20,12 +20,11 @@ namespace goedle_sdk.detail
         private int cd2;
         private string cd_event = null;
         private IGoedleHttpClient gio_http_client;
-        private IUnityWebRequests www;
         private GoedleUtils goedleUtils = new GoedleUtils();
 
         //private string locale = null;
 
-        public GoedleAnalytics(string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name, int cd1, int cd2, string cd_event, IGoedleHttpClient gio_http_client, IUnityWebRequests www)//, string locale)
+        public GoedleAnalytics(string api_key, string app_key, string user_id, string app_version, string ga_tracking_id, string app_name, int cd1, int cd2, string cd_event, IGoedleHttpClient gio_http_client)//, string locale)
         {
             this.api_key = api_key;
             this.app_key = app_key;
@@ -37,9 +36,13 @@ namespace goedle_sdk.detail
             this.cd2 = cd2;
             this.cd_event = cd_event;
             this.gio_http_client = gio_http_client;
-            this.www = www;
             //this.locale = GoedleLanguageMapping.GetLanguageCode (locale);
             track_launch();
+        }
+
+        public void reset_user_id(string user_id)
+        {
+            this.user_id = user_id;
         }
 
         public void set_user_id(string user_id)
@@ -74,7 +77,7 @@ namespace goedle_sdk.detail
             }
 
             string url = GoedleConstants.TRACK_URL;
-            gio_http_client.sendPost(www, url, content, authentication);
+            gio_http_client.sendPost(url, content, authentication);
 
             // Sending tp Google Analytics for now we only support the Event tracking
             string type = "event";
@@ -148,7 +151,7 @@ namespace goedle_sdk.detail
                 postData.Add(String.Concat("cd", cd2), event_value);
             }
 
-            gio_http_client.sendGet(www, buildGAUrlDataString(postData));
+            gio_http_client.sendGet(buildGAUrlDataString(postData));
         }
 
 
@@ -185,17 +188,6 @@ namespace goedle_sdk.detail
         {
             track(GoedleConstants.IDENTIFY, null, null, false, trait_key, trait_value);
         }
-
-        private string getStrategyUrl(string app_key, string api_key)
-        {
-                // TODO: build strategy url
-                return GoedleConstants.STRATEGY_URL;
-        }
-
-        public JSONNode getStrategy(){
-            return this.gio_http_client.getStrategy(this.www, getStrategyUrl(this.app_key,this.api_key));
-        }
-
 
 		public int getTimeStamp ()
 		{
