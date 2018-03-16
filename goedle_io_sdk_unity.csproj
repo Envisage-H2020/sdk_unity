@@ -316,11 +316,11 @@
     <Compile Include="Assets\goedle_io\Scripts\detail\GoedleAnalytics.cs" />
     <Compile Include="Assets\goedle_io\Scripts\detail\GoedleAtom.cs" />
     <Compile Include="Assets\goedle_io\Scripts\detail\GoedleConstants.cs" />
+    <Compile Include="Assets\goedle_io\Scripts\detail\GoedleHttpClient.cs" />
     <Compile Include="Assets\goedle_io\Scripts\detail\GoedlePersistentStorageController.cs" />
     <Compile Include="Assets\goedle_io\Scripts\detail\GoedlePersonStorage.cs" />
-    <Compile Include="Assets\goedle_io\Scripts\detail\GoogleWrappedHttpClient.cs" />
+    <Compile Include="Assets\goedle_io\Scripts\detail\GoedleUtils.cs" />
     <Compile Include="Assets\goedle_io\Scripts\GoedleAnalytics.cs" />
-    <Compile Include="Assets\goedle_io\Scripts\GoedleHttpClient.cs" />
     <Compile Include="Assets\goedle_io\Scripts\GoedleLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

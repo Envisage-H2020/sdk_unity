@@ -13,6 +13,7 @@
 using UnityEngine;
 using System;
 using SimpleJSON;
+using UnityEngine.Networking;
 
 namespace goedle_sdk
 {
@@ -29,6 +30,8 @@ namespace goedle_sdk
     public class GoedleAnalytics : MonoBehaviour
     {
         public static GoedleAnalytics instance = null;
+        IUnityWebRequests www = null;
+
         /*! \cond PRIVATE */
         #region settings
         [Header("Project")]
@@ -106,7 +109,7 @@ namespace goedle_sdk
 		public static void trackTraits(string traitKey, string traitValue)
 		{
 			#if !ENABLE_GOEDLE
-                goedle_analytics.trackTraits(null, null, null, traitKey, traitValue);
+                goedle_analytics.trackTraits(traitKey, traitValue);
 			#endif
 		}
 
@@ -197,14 +200,12 @@ namespace goedle_sdk
                     app_name = Application.productName;
                 else
                     app_name = app_version;
-
             //string locale = Application.systemLanguage.ToString();
             // Build HTTP CLient
-
-            IGoedleHttpClient gio_http_client = new GoedleHttpClient(this);
+            IGoedleHttpClient gio_http_client = (new GameObject("GoedleHTTPClient")).AddComponent<GoedleHttpClient>();
             if (tracking_enabled && gio_interface == null)
             {
-                gio_interface = new detail.GoedleAnalytics(api_key, app_key, user_id.ToString("D"), app_version, GA_TRACKIND_ID, app_name, GA_CD_1, GA_CD_2, GA_CD_EVENT, gio_http_client);
+                gio_interface = new detail.GoedleAnalytics(api_key, app_key, user_id.ToString("D"), app_version, GA_TRACKIND_ID, app_name, GA_CD_1, GA_CD_2, GA_CD_EVENT, gio_http_client, www);
             }
 		}
 
