@@ -105,18 +105,16 @@ namespace goedle_sdk.detail
             string url = null;
             string content = null;
             string authentification = null;
-            IUnityWebRequests www = null;
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
-
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.track("event");
 
 
             var N = JSON.Parse(content);
             Assert.AreEqual("event", N["event"].Value);
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             N = JSON.Parse(content);
 
             gio_interface.track("event", "event_id");
@@ -124,7 +122,7 @@ namespace goedle_sdk.detail
             Assert.AreEqual("event",N["event"].Value);
             Assert.AreEqual("event_id", N["event_id"].Value);
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.track("event", "event_id", "event_value");
             N = JSON.Parse(content);
             Assert.AreEqual("event",N["event"].Value);
@@ -146,17 +144,16 @@ namespace goedle_sdk.detail
             string url = null;
             string content = null;
             string authentification = null;
-            IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
             gio_interface.getSceneName();
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost( Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
            
             gio_interface.trackTraits("first_name", "marc");
             var N = JSON.Parse(content);
             Assert.AreEqual("marc", N["first_name"].Value);
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.trackTraits("last_name", "mueller");
             N = JSON.Parse(content);
             Assert.AreEqual("mueller", N["last_name"].Value);
@@ -174,11 +171,10 @@ namespace goedle_sdk.detail
             string url = null;
             string content = null;
             string authentification = null;
-            IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost( Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.trackGroup("school", "ggs goedle");
             var N = JSON.Parse(content);
             Assert.AreEqual("group", N["event"].Value);
@@ -199,11 +195,10 @@ namespace goedle_sdk.detail
             string url = null;
             string content = null;
             string authentification = null;
-            IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
            
             gio_interface.set_user_id("u2");
             var N = JSON.Parse(content);
@@ -213,29 +208,29 @@ namespace goedle_sdk.detail
         }
 
         /// <summary>
-        /// 
+        /// TODO create an test for async tasks and IENumerators
         /// </summary>
         /// 
+        /*
         [Test]
         public void CheckStrategy()
         {
-
-
             string strategy_string = "{\"config\": { \"scenario\": \"seashore\" , \"wind_speed\": \"fast\"}, \"id\":1}";
-            IGoedleHttpClient gio_http_client = Substitute.For<IGoedleHttpClient>();
-
             IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
+            IGoedleHttpClient gio_http_client = Substitute.For<IGoedleHttpClient>(www);
+
+
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
             var N = JSON.Parse(strategy_string);
-            gio_http_client.getStrategy(Arg.Any<IUnityWebRequests>(), Arg.Any<string>()).Returns(N);
-            JSONNode strategy_returned = gio_interface.getStrategy();
+            gio_http_client.getStrategy(Arg.Any<string>(), Arg.Any<string>()).Returns(N);
+            IEnumerator strategy_returned = gio_interface.getStrategy();
 
             Assert.AreEqual("seashore", N["config"]["scenario"].Value);
             Assert.AreEqual("fast", N["config"]["wind_speed"].Value);
             Assert.AreEqual("1", N["id"].Value);
 
-        }
+        }*/
 
         /// <summary>
         /// Test for testing Google Analytics Tracking
@@ -256,11 +251,10 @@ namespace goedle_sdk.detail
             event_name = "event_ga";
             event_id = "event_id_ga";
             event_value = "500";
-            IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, GA_TRACKIND_ID, this.app_name, GA_CD_1, GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
-            gio_http_client.sendGet(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url_get = x));
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, GA_TRACKIND_ID, this.app_name, GA_CD_1, GA_CD_2, this.GA_CD_EVENT, gio_http_client);
+            gio_http_client.sendGet( Arg.Do<string>(x => url_get = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.track("event_ga");
             // TODO: We have to mock the gameManager to test also the scence name
             DecodeQueryParametersTest(url_get, 
@@ -280,8 +274,8 @@ namespace goedle_sdk.detail
             var N = JSON.Parse(content);
             Assert.AreEqual("event_ga", N["event"].Value);
 
-            gio_http_client.sendGet(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url_get = x));
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));            
+            gio_http_client.sendGet( Arg.Do<string>(x => url_get = x));
+            gio_http_client.sendPost( Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));            
             gio_interface.track(event_name, event_id);
 
             N = JSON.Parse(content);
@@ -300,8 +294,8 @@ namespace goedle_sdk.detail
                 {"ea", event_name}
             });
 
-            gio_http_client.sendGet(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url_get = x));
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendGet( Arg.Do<string>(x => url_get = x));
+            gio_http_client.sendPost( Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.track(event_name, event_id, event_value);
             N = JSON.Parse(content);
             Assert.AreEqual(event_name, N["event"].Value);
@@ -343,12 +337,11 @@ namespace goedle_sdk.detail
             event_name = "group";
             event_id = "school";
             event_value = "ggs_goedle";
-            IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
-            gio_http_client.sendGet(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url_get = x));
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
+            gio_http_client.sendGet( Arg.Do<string>(x => url_get = x));
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost( Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
             gio_interface.trackGroup(event_id,event_value);
             var N = JSON.Parse(content);
             Assert.AreEqual(event_name, N["event"].Value);
@@ -394,12 +387,11 @@ namespace goedle_sdk.detail
             string content = null;
             string authentification = null;
             event_name = "identify";
-            IUnityWebRequests www = null;
 
-            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client, www);
-            gio_http_client.sendGet(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url_get = x));
+            GoedleAnalytics gio_interface = new GoedleAnalytics(this.api_key, this.app_key, this.user_id, this.app_version, this.GA_TRACKIND_ID, this.app_name, this.GA_CD_1, this.GA_CD_2, this.GA_CD_EVENT, gio_http_client);
+            gio_http_client.sendGet(Arg.Do<string>(x => url_get = x));
 
-            gio_http_client.sendPost(Arg.Any<IUnityWebRequests>(), Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
+            gio_http_client.sendPost(Arg.Do<string>(x => url = x), Arg.Do<string>(x => content = x), Arg.Do<string>(x => authentification = x));
 
             // u1 is the default user_id now u2 replaces u1 and u1 get the anonymous id
             gio_interface.set_user_id("u2");

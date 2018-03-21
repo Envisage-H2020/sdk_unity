@@ -320,6 +320,7 @@
   <ItemGroup>
     <Compile Include="Assets\goedle_io\Editor\Tests\GoedleAnalyticsTest.cs" />
     <Compile Include="Assets\goedle_io\Editor\Tests\GoedleAtomTest.cs" />
+    <Compile Include="Assets\goedle_io\Editor\Tests\GoedleUtilsTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

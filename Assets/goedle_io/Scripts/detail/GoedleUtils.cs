@@ -31,7 +31,6 @@ namespace goedle_sdk.detail
             return user_id_hash.ToString();
         }
 
-
         public string HexStringFromBytes(byte[] bytes)
         {
             StringBuilder sb = new StringBuilder();
@@ -57,16 +56,12 @@ namespace goedle_sdk.detail
             float floatValue;
             return Int32.TryParse(value, out intValue) || float.TryParse(value, out floatValue);
         }
-
         public static string getStrategyUrl(string app_key, string api_key)
         {
             // TODO: build strategy url
             return GoedleConstants.STRATEGY_URL;
         }
-
     }
-
-
     public static class UriHelper
     {
         public static Dictionary<string, string> DecodeQueryParameters(this Uri uri)
@@ -76,7 +71,6 @@ namespace goedle_sdk.detail
 
             if (uri.Query.Length == 0)
                 return new Dictionary<string, string>();
-
             return uri.Query.TrimStart('?')
                             .Split(new[] { '&', ';' }, StringSplitOptions.RemoveEmptyEntries)
                             .Select(parameter => parameter.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries))
@@ -84,7 +78,6 @@ namespace goedle_sdk.detail
                       .ToDictionary(grouping => grouping.Key, grouping => string.Join(",", grouping.ToArray()));
         }
     }
-
     public class CoroutineWithData : MonoBehaviour
     {
         public Coroutine coroutine { get; private set; }
